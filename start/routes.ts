@@ -20,13 +20,25 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
-Route.get('/users', 'UsersController.allUsers').middleware('auth')
-Route.post('/logout', 'UsersController.loginOut').middleware('auth')
-Route.post('/phone', 'UsersController.savePhoneUser').middleware('auth')
-Route.post('/sendmessage', 'UsersController.sendCodeVeryfy').middleware('auth')
-Route.post('/verifycode', 'UsersController.verifyCode').middleware('auth')
-Route.post('/users', 'UsersController.createUser')
+Route.get('/users', 'UsersController.allUsers')
+Route.get('/participantes', 'SalasController.participantesSala')
+
+Route.post('/create', 'UsersController.createUser')
 Route.post('/login', 'UsersController.login')
+
+Route.group(() => {
+  Route.post('/phone', 'UsersController.savePhoneUser')
+  Route.post('/sendmessage', 'UsersController.sendCodeVeryfy')
+  Route.post('/verifycode', 'UsersController.verifyCode')
+  Route.post('/logout', 'UsersController.loginOut')
+}).prefix('user').middleware('auth')
+
+Route.group(() => {
+  Route.post('/create', 'SalasController.creacionSala')
+  Route.post('/join', 'SalasController.joinSala')
+}).prefix('room').middleware(['auth', "active"])
+
+
+
+
+

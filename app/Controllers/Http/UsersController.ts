@@ -81,23 +81,24 @@ export default class UsersController {
                 Authorization: `Basic ${Buffer.from(`AC06fa385aeccb624eab49ef77e40471e7:${process.env.AUTH_TOKEN}`).toString('base64')}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
             };
-
-            const responseSendMessage = await axios.post(url, data, { headers });
+            await codigo.save()
+            return response.status(201).json(
+                {
+                    "status": "success",
+                    "data": codigo
+                }
+            )
+        /*    const responseSendMessage = await axios.post(url, data, { headers });
 
             if (responseSendMessage.status === 201) {
-                await codigo.save()
-                return response.status(201).json(
-                    {
-                        "status": "success",
-                        "data": codigo
-                    }
-                )
+            
+              
             } else {
                 response.status(500).json({
                     "status": "error",
                     "message": "Error al enviar el mensaje"
                 })
-            }
+            }*/
 
            
         } catch (error) {
@@ -180,7 +181,7 @@ export default class UsersController {
             const email = validatedData.email
             const password = validatedData.password
 
-            const token = await auth.use('api').attempt(email, password, { expiresIn: '10mins' })
+            const token = await auth.use('api').attempt(email, password, { expiresIn: '50mins' })
             return token
         } catch (error) {
             return response.unauthorized({
